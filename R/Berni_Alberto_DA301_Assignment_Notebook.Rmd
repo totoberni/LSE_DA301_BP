@@ -1,2 +1,269 @@
-# Title
+---
+title: "Turtle Games: Sales and Loyalty Analysis"
+author: "Berni Alberto"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: journal
+    toc: true
+    toc_float: true
+    df_print: kable # Adds nice printing for data frames
+---
 
+```{r setup, include=FALSE}
+# This chunk sets up the global options for the notebook.
+# The code in this chunk will run, but will not be shown in the final report.
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width=10, fig.height=6)
+
+# Restore the project library to ensure all packages are installed
+# renv::restore()
+
+# Load all required libraries for the entire analysis
+library(DT)           # For interactive tables
+library(here)         # For robust file paths
+library(skimr) # For detailed summaries
+library(plotly)       # For interactive plots
+library(moments) # For skewness and kurtosis
+library(tidyverse)
+library(DataExplorer) # For automated EDA reports
+```
+
+# Introduction
+
+This report presents an exploratory data analysis (EDA) and the development of a multiple linear regression (MLR) model for Turtle Games. The primary objectives are:
+1.  To analyze sales data to uncover insights into customer behavior and loyalty point accumulation.
+2.  To build a predictive model for customer loyalty points.
+3.  To provide actionable recommendations to the sales and marketing departments based on the findings.
+
+This analysis uses R for its robust statistical and visualization capabilities, aligning with Turtle Games' existing workflows.
+
+---
+
+# Assignment 5: Exploratory Data Analysis
+
+In this section, we will load, clean, and explore the Turtle Games customer review dataset. The goal is to identify initial patterns, distributions, and outliers that can inform business strategy.
+
+## 1. Data Loading and Preparation
+
+We begin by loading the pre-cleaned dataset created in the Python section of this project. Using a cleaned dataset ensures consistency and allows us to focus directly on the analysis in R.
+
+```{r load_data}
+# Load the cleaned dataset from the Data directory.
+# We use the here() function from the 'here' package to create a robust,
+# project-relative file path. This avoids common issues with working directories
+# (e.g., setwd()) and makes the analysis more reproducible.
+# The path starts at the project root.
+reviews <- read_csv(here("Data", "turtle_reviews_2.csv"))
+
+# Display the first few rows to confirm it loaded correctly
+head(reviews)
+```
+
+> `Note:` The `here` package is a best-practice tool for reproducible R projects. It locates the project's root directory (where the `.Rproj` file is) and builds file paths from there. This means the code will run correctly on any machine without needing to manually change `setwd()` calls, a common source of errors when sharing R scripts. [Further Reading: `here` package documentation](https://here.r-lib.org/).
+
+
+## 2. Initial Data Skim: A Rich Overview
+
+Before diving into plots, we'll get a high-level statistical and structural summary of the data using `skimr::skim()`.
+
+```{r initial_summary}
+# skim() provides a much richer and more informative summary than base R's summary()
+# or Python's pandas .describe(). It includes data types, missing value counts,
+# completion rates, and even inline histograms for numeric variables.
+skim(reviews)
+```
+
+**Commentary:** In Python with pandas, obtaining this level of detail would require calling both `.info()` (for data types and null counts) and `.describe()` (for summary statistics), and we still wouldn't get the convenient inline histograms or completion rates that `skim()` provides in a single command. This demonstrates how R's specialized packages can accelerate the initial data exploration phase.
+
+## 3. Automated EDA: Maximum Insight, Minimum Effort
+
+To rapidly generate a broad set of visualizations and identify areas for deeper investigation, we can use the `DataExplorer` package. It can create a complete HTML report with dozens of plots in a single line of code.
+
+```{r automated_eda, eval=FALSE}
+# This command generates a comprehensive EDA report as an HTML file.
+# Note: We set 'eval=FALSE' for the final knitted report to avoid embedding a very
+# large report within our main document. You can run this line interactively in RStudio.
+
+DataExplorer::create_report(reviews, output_file = "R/out/Turtle_Games_EDA_Report.html", y = "loyaltyPoints")
+```
+
+**Commentary:** This is a key differentiator from a typical Python workflow. While libraries like `pandas-profiling` exist, `DataExplorer` is deeply integrated into the R ecosystem and highly customizable. It automates the creation of histograms, bar charts, correlation matrixes, QQ-plots, and more. This frees the analyst from writing boilerplate plotting code for initial exploration and allows them to focus their energy on creating bespoke visualizations for the most important questions, which we will do next.
+
+Visualizations are essential for understanding the distribution of data and the relationships between variables. We will focus on the `loyalty_points` variable.
+
+### Histograms: Understanding Distributions
+
+Histograms help us see the shape of the data for a single continuous variable.
+
+```{r histograms}
+# Histogram for loyalty_points
+ggplot(reviews, aes(x = loyalty_points)) +
+  geom_histogram(binwidth = 100, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of Customer Loyalty Points",
+       x = "Loyalty Points",
+       y = "Frequency") +
+  theme_minimal()
+
+# Histogram for remuneration
+ggplot(reviews, aes(x = remuneration)) +
+  geom_histogram(binwidth = 5, fill = "salmon", color = "black") +
+  labs(title = "Distribution of Customer Remuneration",
+       x = "Remuneration (in thousands)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+### Scatterplots: Exploring Relationships
+
+Scatterplots are perfect for visualizing the relationship between two numeric variables.
+
+```{r scatterplots}
+# Scatterplot of remuneration vs. loyalty_points
+ggplot(reviews, aes(x = remuneration, y = loyalty_points)) +
+  geom_point(alpha = 0.6, color = "purple") +
+  geom_smooth(method = "lm", color = "red", se = FALSE) + # Add a linear trend line
+  labs(title = "Remuneration vs. Loyalty Points",
+       x = "Remuneration",
+       y = "Loyalty Points") +
+  theme_minimal()
+
+# Scatterplot of spending_score vs. loyalty_points
+ggplot(reviews, aes(x = spending_score, y = loyalty_points)) +
+  geom_point(alpha = 0.6, color = "orange") +
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +
+  labs(title = "Spending Score vs. Loyalty Points",
+       x = "Spending Score (1-100)",
+       y = "Loyalty Points") +
+  theme_minimal()
+```
+
+### Boxplots: Identifying Outliers and Groupings
+
+Boxplots are useful for comparing distributions across different categories.
+
+```{r boxplots}
+# Boxplot of loyalty points by gender
+ggplot(reviews, aes(x = gender, y = loyalty_points, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "Loyalty Points Distribution by Gender",
+       x = "Gender",
+       y = "Loyalty Points") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## 4. Key Observations from EDA
+
+* **Distributions:** *Comment on the shape of the distributions. Are they normal, skewed? What does this imply? For example, the loyalty points might be right-skewed, indicating most customers have fewer points.*
+* **Patterns & Relationships:** *Describe the relationships you observed. Is there a positive or negative correlation between remuneration/spending score and loyalty points?*
+* **Outliers:** *Did you notice any potential outliers in the boxplots or scatterplots? How might these affect the analysis?*
+* **Groupings:** *Does grouping by gender or other categorical variables reveal any interesting differences in customer behavior?*
+
+---
+
+# Assignment 6: Predictive Modeling
+
+Building on the EDA, we will now perform statistical analysis and create a multiple linear regression (MLR) model to predict `loyalty_points`.
+
+## 1. Statistical Analysis
+
+Let's look at the correlation between our numeric variables to select features for our model. A correlation matrix is a great tool for this.
+
+```{r correlation_matrix}
+# Select only numeric columns for correlation analysis
+numeric_vars <- reviews %>% select_where(is.numeric)
+
+# Calculate the correlation matrix
+cor_matrix <- cor(numeric_vars, use = "complete.obs")
+
+# Print the correlation matrix (rounded for readability)
+round(cor_matrix, 2)
+
+# For a better visual, you can use the corrplot package
+# renv::install("corrplot")
+# library(corrplot)
+# corrplot(cor_matrix, method = "circle")
+```
+
+**Justification for Feature Selection:**
+* Based on the correlation matrix, `remuneration` and `spending_score` show the strongest linear relationships with `loyalty_points`.
+* Age also has a moderate correlation.
+* We will use these three variables as predictors in our initial model.
+* **Potential Concerns:** *Mention multicollinearity if predictors are highly correlated with each other. Check VIF values if needed.*
+
+## 2. Building the Multiple Linear Regression (MLR) Model
+
+We'll create a model with the formula:
+`loyalty_points ~ remuneration + spending_score + age`
+
+```{r build_mlr_model}
+# Build the linear regression model
+mlr_model <- lm(loyalty_points ~ remuneration + spending_score + age, data = reviews)
+
+# Get the model summary
+summary(mlr_model)
+```
+
+## 3. Model Evaluation and Interpretation
+
+The model summary provides crucial statistics to evaluate its performance.
+
+* **Coefficients (Estimate):** *Interpret the coefficients. For every one-unit increase in `remuneration`, `loyalty_points` increases by [value], holding other variables constant.*
+* **P-values (Pr(>|t|)):** *All predictors have very small p-values (< 0.05), indicating they are statistically significant.*
+* **R-squared:** *The Adjusted R-squared value is [value]. This means our model explains approximately [value * 100]% of the variance in `loyalty_points`. Comment on whether this is a good fit.*
+* **F-statistic:** *The F-statistic is large and its p-value is very small, which suggests that the model is useful and better than a model with no predictors.*
+
+### Visualizing Model Fit
+
+We can plot the actual vs. predicted values to visually assess the model's performance.
+
+```{r visualize_model}
+# Get predicted values
+predicted_points <- predict(mlr_model, newdata = reviews)
+
+# Create a data frame for plotting
+plot_data <- data.frame(
+  Actual = reviews$loyalty_points,
+  Predicted = predicted_points
+)
+
+# Plot actual vs. predicted values
+ggplot(plot_data, aes(x = Actual, y = Predicted)) +
+  geom_point(alpha = 0.5, color = "blue") +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red", size = 1) +
+  labs(title = "Actual vs. Predicted Loyalty Points",
+       x = "Actual Loyalty Points",
+       y = "Predicted Loyalty Points") +
+  theme_minimal()
+```
+
+## 4. Using the Model for Prediction
+
+Let's demonstrate how to use the model to predict loyalty points for a new, hypothetical customer.
+
+```{r predict_scenarios}
+# Create a new data frame for prediction scenarios
+new_customers <- data.frame(
+  remuneration = c(50, 90, 120),
+  spending_score = c(40, 85, 20),
+  age = c(30, 45, 60)
+)
+
+# Use the model to predict loyalty points
+predicted_loyalty <- predict(mlr_model, newdata = new_customers)
+
+# Display the predictions
+new_customers$predicted_loyalty_points <- round(predicted_loyalty, 0)
+print(new_customers)
+```
+
+# Conclusion and Recommendations
+
+## Summary of Findings
+* *Briefly summarize the key insights from both the EDA and the MLR model.*
+* *Example: Customer spending score and remuneration are significant positive predictors of loyalty points. The developed model can explain X% of the variance in loyalty points.*
+
+## Recommendations for the Business
+* **Marketing Efforts:** *Where should the business focus its marketing? Suggest targeting customers with high spending scores or high remuneration, as they tend to accumulate more points.*
+* **Loyalty Program Improvements:** *How could the program be improved? Perhaps offer tiered rewards based on spending scores to encourage more engagement.*
+* **Analysis Improvements:** *What are the next steps? Consider non-linear models if the relationships aren't strictly linear. Also, collecting more feature data (e.g., frequency of purchase, product categories) could significantly improve model accuracy.*
