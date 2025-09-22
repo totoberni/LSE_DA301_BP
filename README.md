@@ -1,9 +1,3 @@
-Of course. Here is a draft for your `README.md` file based on your project's structure and our setup plan.
-
-You can copy and paste the entire content below directly into your `README.md` file.
-
------
-
 # LSE DA301: Advanced Analytics - Turtle Games Project
 
 This repository contains the coursework for the LSE Data Analytics Career Accelerator course DA301. The project involves a comprehensive analysis of the Turtle Games dataset to derive business insights on customer loyalty, segmentation, and sentiment. The analysis is conducted using both Python for machine learning tasks and R for statistical modeling and visualization.
@@ -12,21 +6,27 @@ This repository contains the coursework for the LSE Data Analytics Career Accele
 
 ## Repository Structure
 
-The project is organized into separate directories for data, Python notebooks, R scripts, and final reports.
+The project is organized into separate directories for data, Python notebooks, R scripts, and final reports. The R environment is managed by `renv` for full reproducibility.
 
 ```plaintext
 LSE_DA301_BP/
+├── .Rprofile
 ├── Data/
 │   ├── metadata_turtle_games.txt
-│   └── turtle_reviews.csv
+│   ├── turtle_reviews.csv
+│   └── turtle_reviews_2.csv
 ├── Python/
-│   ├── .ipynb_checkpoints/
+│   ├── .venv
 │   ├── Berni_Alberto_DA301_Assignment_Notebook.ipynb
 │   └── requirements.txt
 ├── R/
+│   ├── Berni_Alberto_DA301_Assignment_Notebook.Rmd
 │   └── LSE_DA301_Assignment_R_template.R
 ├── Reports/
-├── .gitignore
+├── renv/
+│   ├── activate.R
+│   └── settings.json
+├── renv.lock
 └── README.md
 ```
 
@@ -35,6 +35,32 @@ LSE_DA301_BP/
 ## Environment Setup
 
 To ensure full reproducibility of the analysis, please follow the setup instructions below.
+
+### R Environment
+
+The R analysis uses the **`renv`** package to create a reproducible, project-specific environment.
+
+1.  **Prerequisite**: Ensure you have **R** installed on your system. You can download it from [CRAN](https://cran.r-project.org/).
+
+2.  **Clone the Repository**: If you haven't already, clone the project to your local machine.
+
+    ```bash
+    git clone <your-repository-url>
+    cd LSE_DA301_BP
+    ```
+
+3.  **Open the Project in R**: Start an R session with the project's root directory as the working directory. The easiest way to do this is by opening the project in an IDE like RStudio or VS Code (with the R extension).
+
+4.  **Restore the `renv` Environment**: When you first open the project, the `.Rprofile` script should automatically detect the lockfile. If prompted, agree to restore the environment from the lockfile. If you are not prompted, simply run the following command in the R console:
+
+    ```r
+    renv::restore()
+    ```
+
+    This command reads the `renv.lock` file and installs the exact versions of all required R packages, ensuring a fully reproducible setup.\
+    You are now ready to run the analysis in `R/Berni_Alberto_DA301_Assignment_Notebook.Rmd`.
+
+-----
 
 ### Python Environment
 
@@ -84,8 +110,11 @@ The Python analysis is managed within a dedicated virtual environment.
 
 7.  **Launch Jupyter and Run the Notebook**:
 
-    ```bash
-    jupyter notebook
-    ```
-
-    Once Jupyter opens, open the `Berni_Alberto_DA301_Assignment_Notebook.ipynb` file. When the notebook is open, go to `Kernel > Change kernel` and select **`lse-da301-project`** to connect the notebook to your new environment.
+      * From terminal:
+        ```bash
+        jupyter notebook
+        ```
+      * From your IDE (VS Code):
+        Open `Berni_Alberto_DA301_Assignment_Notebook.ipynb` from your IDE.  
+        Go to `Kernels > Change Kernel`  
+        Select `Jupyter Kernel` and select **`lse-da301-project`**.

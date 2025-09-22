@@ -1,1 +1,9 @@
-# Miao
+# Python 
+.*venv*
+
+# R
+renv/library/*
+renv/staging/*
+renv/cellar/*
+
+*.mp4
