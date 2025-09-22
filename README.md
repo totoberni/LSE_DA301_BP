@@ -41,7 +41,19 @@ To ensure full reproducibility of the analysis, please follow the setup instruct
 
 The R analysis uses the **`renv`** package to create a reproducible, project-specific environment.
 
-1.  **Prerequisite**: Ensure you have **R** installed on your system. You can download it from [CRAN](https://cran.r-project.org/).
+1.  **Prerequisites**: Before you begin, ensure you have the necessary system-level software installed.
+    
+        *   **R**: You must have a base installation of R. You can download it from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
+    
+        *   **Pandoc**: The `rmarkdown` package, which is used to generate reports, requires **Pandoc** as a system dependency. RStudio typically bundles this automatically, but for standalone R setups (like in VS Code), it must be installed separately.
+    
+            *   **Download**: Go to the [official Pandoc installation page](https://pandoc.org/installing.html).
+            *   **Installation**:
+                *   **Windows**: Download and run the `.msi` installer. The installer will automatically add Pandoc to your system's PATH, which is required.
+                *   **macOS**: The recommended installation method is using [Homebrew](https://brew.sh/). In your terminal, run: `brew install pandoc`
+                *   **Linux**: Use your distribution's package manager. For example, on Debian/Ubuntu, run: `sudo apt-get install pandoc`
+            *   **Verify Installation**: After installing, close and reopen your terminal or IDE, then run `pandoc --version`. You should see the installed version number.
+    
 
 2.  **Clone the Repository**: If you haven't already, clone the project to your local machine.
 
