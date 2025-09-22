@@ -10,7 +10,6 @@ The project is organized into separate directories for data, Python notebooks, R
 
 ```plaintext
 LSE_DA301_BP/
-├── .Rprofile
 ├── Data/
 │   ├── metadata_turtle_games.txt
 │   ├── turtle_reviews.csv
@@ -26,6 +25,8 @@ LSE_DA301_BP/
 ├── renv/
 │   ├── activate.R
 │   └── settings.json
+├── .Rprofile
+├── .gitignore
 ├── renv.lock
 └── README.md
 ```
