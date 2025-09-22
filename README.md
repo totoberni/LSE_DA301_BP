@@ -47,7 +47,7 @@ The R analysis uses the **`renv`** package to create a reproducible, project-spe
     
     * **Pandoc**: The `rmarkdown` package, which is used to generate reports, requires **Pandoc** as a system dependency. RStudio typically bundles this automatically, but for standalone R setups (like in VS Code), it must be installed separately.
     
-    * **Download**: Go to the [official Pandoc installation page](https://pandoc.org/installing.html).
+    **Download**: Go to the [official Pandoc installation page](https://pandoc.org/installing.html).
         * **Installation**:
             *   **Windows**: Download and run the `.msi` installer. The installer will automatically add Pandoc to your system's PATH, which is required.
             *   **macOS**: The recommended installation method is using [Homebrew](https://brew.sh/). In your terminal, run: `brew install pandoc`
