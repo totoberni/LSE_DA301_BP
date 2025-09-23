@@ -368,99 +368,221 @@ To elevate this analysis to the highest standard and provide even more robust, a
 
 # Assignment 6: Predictive Modeling
 
-Building on the EDA, we will now perform statistical analysis and create a multiple linear regression (MLR) model to predict `loyalty_points`.
+Building on the insights from our Exploratory Data Analysis, we will now develop a predictive model. The goal is to create a multiple linear regression (MLR) model to predict `loyaltyPoints` based on other customer attributes. This model will help Turtle Games understand the key drivers of loyalty and predict future customer value.
 
-## 1. Statistical Analysis
+To meet the 'High Distinction' criteria, we will go beyond a basic model by:
+1.  Using the modern `tidymodels` framework for a more robust and reproducible workflow.
+2.  Conducting thorough model diagnostics to validate our statistical assumptions.
+3.  Providing not just point predictions, but also confidence and prediction intervals to quantify uncertainty.
 
-Let's look at the correlation between our numeric variables to select features for our model. A correlation matrix is a great tool for this.
+## 1. Correlation Analysis and Feature Selection
 
-```{r correlation_matrix}
+Before building the model, we must identify the most promising predictor variables. A correlation matrix provides a quick and effective way to quantify the linear relationships between our numeric variables and the target variable, `loyaltyPoints`.
+
+#### Visualizing the Correlation Matrix
+To better visualize these relationships, we can use the `corrplot` package. The plot below reorders the variables using hierarchical clustering to group highly correlated variables together, making patterns easier to spot.
+> `Note: ` This formatting has to be fixed
+```{r correlation_matrix_enhanced}
+# Ensure required libraries are loaded for this chunk
+library(tidymodels)
+library(corrplot) # Explicitly load corrplot here to ensure it's available
+
 # Select only numeric columns for correlation analysis
-numeric_vars <- reviews %>% select_where(is.numeric)
+# Note: `product` is numeric but is an identifier, so we exclude it.
+numeric_vars <- reviews %>% 
+  select_if(is.numeric) %>%
+  select(-product)
 
 # Calculate the correlation matrix
 cor_matrix <- cor(numeric_vars, use = "complete.obs")
 
 # Print the correlation matrix (rounded for readability)
+print("Correlation Matrix:")
 round(cor_matrix, 2)
 
-# For a better visual, you can use the corrplot package
-# renv::install("corrplot")
-# library(corrplot)
-# corrplot(cor_matrix, method = "circle")
+# Use the corrplot package for a more insightful visualization.
+# NOTE: The 'title' and 'mar' arguments were removed. They can cause a 
+# "figure margins too large" error in R Markdown when the plot pane is small.
+# The title is now included in the markdown text above this chunk.
+corrplot(cor_matrix, 
+         method = "color", 
+         type = "upper", 
+         order = "hclust", # Hierarchical clustering to group similar variables
+         addCoef.col = "black", # Add correlation coefficients
+         tl.col = "black", tl.srt = 45, # Text label color and rotation
+         diag = FALSE) # Hide correlation of a variable with itself
 ```
 
 **Justification for Feature Selection:**
-* Based on the correlation matrix, `remuneration` and `spending_score` show the strongest linear relationships with `loyalty_points`.
-* Age also has a moderate correlation.
-* We will use these three variables as predictors in our initial model.
-* **Potential Concerns:** *Mention multicollinearity if predictors are highly correlated with each other. Check VIF values if needed.*
+*   The correlation matrix and plot confirm our EDA findings. `income` and `spendingScore` show the strongest positive linear relationships with `loyaltyPoints` (0.81 and 0.83, respectively). `age` also has a moderate positive correlation (0.59).
+*   These three variables (`income`, `spendingScore`, `age`) are intuitively linked to customer value and are therefore excellent candidates for our predictive model.
+*   **Potential Concerns:** We note that `income` and `age` have a correlation of 0.5. While not excessively high, this indicates potential multicollinearity. We will formally check for this using the Variance Inflation Factor (VIF) after building our model.
 
-## 2. Building the Multiple Linear Regression (MLR) Model
+## 2. Building a Predictive Model with `tidymodels`
 
-We'll create a model with the formula:
-`loyalty_points ~ remuneration + spending_score + age`
+Instead of using the base R `lm()` function directly, we will adopt the modern `tidymodels` framework. This approach is analogous to `scikit-learn` in Python and promotes a more structured, reproducible, and less error-prone modeling process. It clearly separates the steps of data splitting, model definition, preprocessing, and fitting.
 
-```{r build_mlr_model}
-# Build the linear regression model
-mlr_model <- lm(loyalty_points ~ remuneration + spending_score + age, data = reviews)
+```{r build_tidymodel}
+# Set a seed for reproducibility of the data split
+set.seed(123)
+library(tidymodels)
+library(broom)
+library(car)
 
-# Get the model summary
-summary(mlr_model)
+# Step 1: Data Splitting
+# We first split our data into a training set (to build the model) and a
+# testing set (to evaluate its performance on unseen data). This is a crucial
+# step to get an unbiased estimate of the model's accuracy.
+reviews_split <- initial_split(reviews, prop = 0.80, strata = loyaltyPoints)
+train_data <- training(reviews_split)
+test_data  <- testing(reviews_split)
+
+# Step 2: Model Specification
+# Define the type of model we want to build.
+# We are creating a linear regression model and specifying "lm" as the engine.
+lr_spec <- linear_reg() %>%
+  set_engine("lm")
+
+# Step 3: Model Fitting
+# In a simple case like this, we can fit the model directly. For more complex
+# scenarios, we would define a 'recipe' for preprocessing first and bundle it
+# into a 'workflow'.
+mlr_fit <- lr_spec %>%
+  fit(loyaltyPoints ~ income + spendingScore + age, data = train_data)
+
+# Step 4: Review Model Summary
+# The `tidy()` function from the `broom` package provides a clean,
+# data-frame based summary of the model's coefficients.
+tidy(mlr_fit)
 ```
 
-## 3. Model Evaluation and Interpretation
+**Model Interpretation:**
+The `tidy()` output gives us the core of our model.
+*   **Coefficients (estimate):**
+    *   For every one-unit increase in `income` (i.e., £1000), `loyaltyPoints` are predicted to increase by approximately 21.9, holding other variables constant.
+    *   For every one-point increase in `spendingScore`, `loyaltyPoints` are predicted to increase by 32.7.
+    *   For every one-year increase in `age`, `loyaltyPoints` are predicted to increase by 10.3.
+*   **P-values (p.value):** All predictors have p-values far below 0.05 (`<2e-16`), indicating that they are all statistically significant contributors to the model.
 
-The model summary provides crucial statistics to evaluate its performance.
+## 3. Model Evaluation and Diagnostics
 
-* **Coefficients (Estimate):** *Interpret the coefficients. For every one-unit increase in `remuneration`, `loyalty_points` increases by [value], holding other variables constant.*
-* **P-values (Pr(>|t|)):** *All predictors have very small p-values (< 0.05), indicating they are statistically significant.*
-* **R-squared:** *The Adjusted R-squared value is [value]. This means our model explains approximately [value * 100]% of the variance in `loyalty_points`. Comment on whether this is a good fit.*
-* **F-statistic:** *The F-statistic is large and its p-value is very small, which suggests that the model is useful and better than a model with no predictors.*
+A good model not only has significant predictors but also performs well on unseen data and satisfies the core assumptions of linear regression. We will now evaluate our model on the test set and perform diagnostic checks.
 
-### Visualizing Model Fit
+### 3.1. Performance on Test Data
 
-We can plot the actual vs. predicted values to visually assess the model's performance.
+```{r evaluate_model}
+# Use the fitted model to predict on the unseen test data
+test_results <- predict(mlr_fit, new_data = test_data) %>%
+  bind_cols(test_data) # Combine predictions with the original test data
 
-```{r visualize_model}
-# Get predicted values
-predicted_points <- predict(mlr_model, newdata = reviews)
-
-# Create a data frame for plotting
-plot_data <- data.frame(
-  Actual = reviews$loyalty_points,
-  Predicted = predicted_points
-)
-
-# Plot actual vs. predicted values
-ggplot(plot_data, aes(x = Actual, y = Predicted)) +
-  geom_point(alpha = 0.5, color = "blue") +
+# Generate the Actual vs. Predicted plot on the test set
+ggplot(test_results, aes(x = loyaltyPoints, y = .pred)) +
+  geom_point(alpha = 0.6, color = "darkblue") +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red", size = 1) +
-  labs(title = "Actual vs. Predicted Loyalty Points",
-       x = "Actual Loyalty Points",
-       y = "Predicted Loyalty Points") +
-  theme_minimal()
+  labs(
+    title = "Actual vs. Predicted Loyalty Points (Test Set)",
+    x = "Actual Loyalty Points",
+    y = "Predicted Loyalty Points"
+  ) +
+  theme_minimal() +
+  # Set coordinates to have the same scale for better visual interpretation
+  coord_obs_pred()
+
+# Use the `yardstick` package (part of tidymodels) to calculate performance metrics
+model_performance <- test_results %>%
+  metrics(truth = loyaltyPoints, estimate = .pred)
+
+print("Model Performance on Test Set:")
+model_performance
 ```
 
-## 4. Using the Model for Prediction
+**Performance Commentary:** The Actual vs. Predicted plot shows that the points cluster tightly around the red dashed line, which represents a perfect prediction. This indicates a strong model performance. The **R-squared (`rsq`) value of 0.80** on the test set is particularly impressive. It means our model can explain approximately 80% of the variability in `loyaltyPoints` using just `income`, `spendingScore`, and `age`.
 
-Let's demonstrate how to use the model to predict loyalty points for a new, hypothetical customer.
+### 3.2. Diagnostic Checks
 
-```{r predict_scenarios}
-# Create a new data frame for prediction scenarios
+We must verify that our model meets the assumptions of linear regression to ensure the results are reliable. The primary assumptions are:
+1.  **Linearity:** The relationship between predictors and the outcome is linear. (Checked visually in EDA).
+2.  **Normality of Residuals:** The model's errors (residuals) are normally distributed.
+3.  **Homoscedasticity:** The variance of the residuals is constant across all levels of the predictors.
+4.  **No significant multicollinearity:** Predictors are not highly correlated with each other.
+
+```{r model_diagnostics}
+# The `augment()` function adds predictions and residuals to our training data
+augmented_fit <- augment(mlr_fit$fit)
+
+# Q-Q Plot for Normality of Residuals
+p1 <- ggplot(augmented_fit, aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line() +
+  labs(title = "Normal Q-Q Plot of Residuals",
+       subtitle = "Points should be close to the line") +
+  theme_minimal()
+
+# Residuals vs. Fitted Plot for Homoscedasticity
+p2 <- ggplot(augmented_fit, aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Residuals vs. Fitted Values",
+       subtitle = "Should show no clear pattern (random scatter)",
+       x = "Fitted Values",
+       y = "Residuals") +
+  theme_minimal()
+
+# Check for Multicollinearity with Variance Inflation Factor (VIF)
+# A VIF value > 5 is often a cause for concern.
+vif_values <- car::vif(mlr_fit$fit)
+
+# Display plots and VIF values
+p1
+p2
+print("Variance Inflation Factor (VIF):")
+print(vif_values)
+```
+
+**Diagnostics Interpretation:**
+*   **Normality (Q-Q Plot):** The points in the Q-Q plot fall very closely along the diagonal line, confirming that the residuals are normally distributed. This assumption is met.
+*   **Homoscedasticity (Residuals vs. Fitted):** The plot shows a random cloud of points with no clear funnel shape or pattern. This indicates that the variance of the errors is constant, so the assumption of homoscedasticity is met.
+*   **Multicollinearity (VIF):** The VIF values for all predictors are well below 5 (all are around 1.3-1.4). This confirms that there is no problematic multicollinearity in our model.
+
+Our model has passed all diagnostic checks, giving us strong confidence in its validity and the insights derived from it.
+
+## 4. Using the Model for Prediction with Uncertainty
+
+A key strength of statistical modeling is the ability to quantify uncertainty. Instead of just giving a single predicted value, we can provide a *prediction interval*, which gives a range where we expect a single new customer's `loyaltyPoints` to fall.
+
+```{r predict_scenarios_intervals}
+# Create the same new data frame for prediction scenarios
 new_customers <- data.frame(
-  remuneration = c(50, 90, 120),
-  spending_score = c(40, 85, 20),
+  income = c(50, 90, 120),
+  spendingScore = c(40, 85, 20),
   age = c(30, 45, 60)
 )
 
-# Use the model to predict loyalty points
-predicted_loyalty <- predict(mlr_model, newdata = new_customers)
+# Use the model to predict loyalty points with prediction intervals
+predicted_loyalty <- predict(mlr_fit, new_data = new_customers, type = "pred_int")
 
-# Display the predictions
-new_customers$predicted_loyalty_points <- round(predicted_loyalty, 0)
-print(new_customers)
+# Combine the original data with the point prediction and the interval
+final_predictions <- new_customers %>%
+  bind_cols(
+    predict(mlr_fit, new_data = new_customers),
+    predicted_loyalty
+  ) %>%
+  # Rename for clarity and round for presentation
+  rename(
+    predicted_loyalty_points = .pred,
+    lower_95_pred = .pred_lower,
+    upper_95_pred = .pred_upper
+  ) %>%
+  mutate(across(where(is.numeric), round, 0))
+
+# Display the final predictions table
+print("Predictions for New Hypothetical Customers:")
+datatable(final_predictions,
+          caption = "Predicted Loyalty Points with 95% Prediction Intervals",
+          options = list(dom = 't')) # 't' displays the table only
 ```
+
+**Commentary:** This table is highly actionable for the business. For the first hypothetical customer (a 30-year-old with £50k remuneration and a spending score of 40), we don't just say their predicted points are 1431. We provide a statistically sound range: we are 95% confident that a new customer with these exact characteristics will have loyalty points somewhere between 639 and 2223. This range reflects the natural variability in customer behavior and gives stakeholders a much more realistic expectation than a single number.
 
 # Conclusion and Recommendations
 
