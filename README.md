@@ -19,8 +19,13 @@ LSE_DA301_BP/
 │   ├── Berni_Alberto_DA301_Assignment_Notebook.ipynb
 │   └── requirements.txt
 ├── R/
+│   ├── Berni_Alberto_DA301_Assignment_Notebook.html
+│   ├── Berni_Alberto_DA301_Assignment_Notebook.pdf
 │   ├── Berni_Alberto_DA301_Assignment_Notebook.Rmd
-│   └── LSE_DA301_Assignment_R_template.R
+│   ├── Berni_Alberto_DA301_Assignment_Script.R
+│   ├── LSE_DA301_Assignment_R_template.R
+│   └── out/
+│       └── Turtle_Games_EDA_Report_temp.html
 ├── Reports/
 ├── renv/
 │   ├── activate.R
