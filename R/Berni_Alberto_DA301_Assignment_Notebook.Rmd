@@ -8,22 +8,6 @@ output:
     toc: true
     toc_float: true
     df_print: kable # Adds nice printing for data frames
----
-
-> `Note: ` This is an R Markdown file that is used to generate a report. It is written in R and uses the R Markdown format.
-> To export this notebook as a PDF, you can use the following command:
-```{r export_pdf, eval=FALSE}
-pagedown::chrome_print(input = "R/Berni_Alberto_DA301_Assignment_Notebook.Rmd", output = "R/Berni_Alberto_DA301_Assignment_Notebook.pdf")
-```
-
-> To pretty print, you can also use:
-
-```{r pretty_print, eval=FALSE}
-rmarkdown::render("R/Berni_Alberto_DA301_Assignment_Notebook.Rmd")
-```
-
-This will have to be opened in a browser and saved as a PDF.
-
 --- 
 
 ```{r setup, include=FALSE}
@@ -655,3 +639,35 @@ The linear regression model is a powerful and validated first step, providing im
         *   **The company's CRM**: To automatically flag high-potential leads for the sales team.
         *   **The E-commerce Platform**: To offer personalized, real-time incentives at checkout to customers identified by the model as being on the verge of a higher spending tier.
         *   **Internal Dashboards**: To provide a real-time view of the predicted value of incoming customer cohorts.
+
+---
+
+## Exporting the Rmd file
+
+> `Note: ` This is an R Markdown file that is used to generate a report. It is written in R and uses the R Markdown format.
+
+#### Export as PDF Report
+
+To export this notebook as a PDF, you can use the following command:
+```{r export_pdf, eval=FALSE}
+pagedown::chrome_print(input = "R/Berni_Alberto_DA301_Assignment_Notebook.Rmd", output = "R/Berni_Alberto_DA301_Assignment_Notebook.pdf")
+```
+
+#### Export as HTML Report
+
+To pretty print the report as a HTML file, you can also use:
+```{r pretty_print, eval=FALSE}
+rmarkdown::render("R/Berni_Alberto_DA301_Assignment_Notebook.Rmd")
+```
+> `Note:` This will have to be opened in a browser and saved as a PDF.
+
+#### Export as R Script
+
+To generate a full, clean R script that includes all R code and markdown text as comments, you can use the following command:
+```{r export_script, eval=FALSE}
+knitr::purl("R/Berni_Alberto_DA301_Assignment_Notebook.Rmd", 
+            output = "R/Berni_Alberto_DA301_Assignment_Script.R", 
+            documentation = 2)
+```
+
+This will have to be opened in a browser and saved as a PDF.
