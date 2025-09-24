@@ -10,13 +10,19 @@ output:
     df_print: kable # Adds nice printing for data frames
 ---
 
+> `Note: ` This is an R Markdown file that is used to generate a report. It is written in R and uses the R Markdown format.
+> To export this notebook as a PDF, you can use the following command:
+```{r export_pdf, eval=FALSE}
+pagedown::chrome_print(input = "R/Berni_Alberto_DA301_Assignment_Notebook.Rmd", output = "R/Berni_Alberto_DA301_Assignment_Notebook.pdf")
+```
+
 ```{r setup, include=FALSE}
 # This chunk sets up the global options for the notebook.
 # The code in this chunk will run, but will not be shown in the final report.
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width=10, fig.height=6)
 
 # Restore the project library to ensure all packages are installed
-# renv::restore()
+renv::restore()
 
 # Load all required libraries for the entire analysis
 library(DT)           # For interactive tables
@@ -28,6 +34,7 @@ library(pagedown) # For converting HTML reports to PDF
 library(dplyr) # For data manipulation
 library(ggplot2) # For data visualization
 library(corrplot) # For correlation matrix visualization
+library(tidymodels) # For the modern modeling framework
 library(lmtest) # For model diagnostics
 library(broom) # For model summary
 library(car) # For model diagnostics
@@ -359,14 +366,16 @@ To elevate this analysis to the highest standard and provide even more robust, a
     *   **Business Value:** If a non-linear pattern is discovered (e.g., the relationship between `age` and `loyaltyPoints` increases up to a certain point and then plateaus), it would be a critical insight, suggesting that a simple linear regression model might not be the most accurate choice and that more advanced models (e.g., polynomial regression or GAMs) should be considered. This demonstrates a sophisticated approach to model validation.
 
 4.  **From Report to Interactive Data Product with `flexdashboard`:**
-    *   **Objective:** To convert the static R Markdown report into a simple, interactive dashboard for business stakeholders.
-    *   **Method:**
+    * **Objective:** To convert the static R Markdown report into a simple, interactive dashboard for business stakeholders.
+    * **Method:**
         *   Restructure the R Markdown file using the `flexdashboard` format.
         *   Incorporate input controls (e.g., a slider for `spendingScore`) using `shiny` components, allowing users to filter the data and see the visualizations update in real-time.
-    *   **Business Value:** This represents the pinnacle of communicating data insights. Instead of a report, you deliver a tool. Stakeholders at Turtle Games could use this dashboard to explore customer segments on their own, answer their own questions, and build a deeper, more intuitive understanding of the data, thereby greatly increasing the impact and adoption of the analysis.
+        
+    * **Business Value:** This represents the pinnacle of communicating data insights. Instead of a report, you deliver a tool. Stakeholders at Turtle Games could use this dashboard to explore customer segments on their own, answer their own questions, and build a deeper, more intuitive understanding of the data, thereby greatly increasing the impact and adoption of the analysis.
+
 ---
 
-# Assignment 6: Predictive Modeling
+## Assignment 6: Predictive Modeling
 
 Building on the insights from our Exploratory Data Analysis, we will now develop a predictive model. The goal is to create a multiple linear regression (MLR) model to predict `loyaltyPoints` based on other customer attributes. This model will help Turtle Games understand the key drivers of loyalty and predict future customer value.
 
@@ -375,7 +384,7 @@ To meet the 'High Distinction' criteria, we will go beyond a basic model by:
 2.  Conducting thorough model diagnostics to validate our statistical assumptions.
 3.  Providing not just point predictions, but also confidence and prediction intervals to quantify uncertainty.
 
-## 1. Correlation Analysis and Feature Selection
+### 1. Correlation Analysis and Feature Selection
 
 Before building the model, we must identify the most promising predictor variables. A correlation matrix provides a quick and effective way to quantify the linear relationships between our numeric variables and the target variable, `loyaltyPoints`.
 
@@ -384,8 +393,6 @@ To better visualize these relationships, we can use the `corrplot` package. The 
 > `Note: ` This formatting has to be fixed
 ```{r correlation_matrix_enhanced}
 # Ensure required libraries are loaded for this chunk
-library(tidymodels)
-library(corrplot) # Explicitly load corrplot here to ensure it's available
 
 # Select only numeric columns for correlation analysis
 # Note: `product` is numeric but is an identifier, so we exclude it.
@@ -418,16 +425,13 @@ corrplot(cor_matrix,
 *   These three variables (`income`, `spendingScore`, `age`) are intuitively linked to customer value and are therefore excellent candidates for our predictive model.
 *   **Potential Concerns:** We note that `income` and `age` have a correlation of 0.5. While not excessively high, this indicates potential multicollinearity. We will formally check for this using the Variance Inflation Factor (VIF) after building our model.
 
-## 2. Building a Predictive Model with `tidymodels`
+### 2. Building a Predictive Model with `tidymodels`
 
 Instead of using the base R `lm()` function directly, we will adopt the modern `tidymodels` framework. This approach is analogous to `scikit-learn` in Python and promotes a more structured, reproducible, and less error-prone modeling process. It clearly separates the steps of data splitting, model definition, preprocessing, and fitting.
 
 ```{r build_tidymodel}
 # Set a seed for reproducibility of the data split
 set.seed(123)
-library(tidymodels)
-library(broom)
-library(car)
 
 # Step 1: Data Splitting
 # We first split our data into a training set (to build the model) and a
@@ -468,7 +472,7 @@ The `tidy()` output gives us the core of our model.
 
 A good model not only has significant predictors but also performs well on unseen data and satisfies the core assumptions of linear regression. We will now evaluate our model on the test set and perform diagnostic checks.
 
-### 3.1. Performance on Test Data
+#### 3.1. Performance on Test Data
 
 ```{r evaluate_model}
 # Use the fitted model to predict on the unseen test data
@@ -498,7 +502,7 @@ model_performance
 
 **Performance Commentary:** The Actual vs. Predicted plot shows that the points cluster tightly around the red dashed line, which represents a perfect prediction. This indicates a strong model performance. The **R-squared (`rsq`) value of 0.80** on the test set is particularly impressive. It means our model can explain approximately 80% of the variability in `loyaltyPoints` using just `income`, `spendingScore`, and `age`.
 
-### 3.2. Diagnostic Checks
+#### 3.2. Diagnostic Checks
 
 We must verify that our model meets the assumptions of linear regression to ensure the results are reliable. The primary assumptions are:
 1.  **Linearity:** The relationship between predictors and the outcome is linear. (Checked visually in EDA).
@@ -546,7 +550,7 @@ print(vif_values)
 
 Our model has passed all diagnostic checks, giving us strong confidence in its validity and the insights derived from it.
 
-## 4. Using the Model for Prediction with Uncertainty
+### 4. Using the Model for Prediction with Uncertainty
 
 A key strength of statistical modeling is the ability to quantify uncertainty. Instead of just giving a single predicted value, we can provide a *prediction interval*, which gives a range where we expect a single new customer's `loyaltyPoints` to fall.
 
@@ -584,13 +588,60 @@ datatable(final_predictions,
 
 **Commentary:** This table is highly actionable for the business. For the first hypothetical customer (a 30-year-old with £50k remuneration and a spending score of 40), we don't just say their predicted points are 1431. We provide a statistically sound range: we are 95% confident that a new customer with these exact characteristics will have loyalty points somewhere between 639 and 2223. This range reflects the natural variability in customer behavior and gives stakeholders a much more realistic expectation than a single number.
 
-# Conclusion and Recommendations
+### 5. Conclusion and Recommendations
 
-## Summary of Findings
-* *Briefly summarize the key insights from both the EDA and the MLR model.*
-* *Example: Customer spending score and remuneration are significant positive predictors of loyalty points. The developed model can explain X% of the variance in loyalty points.*
+This analysis has successfully transitioned from exploratory data analysis to the development of a robust predictive model for customer loyalty points. The multiple linear regression model, built using the modern `tidymodels` framework, has proven to be both statistically valid and highly predictive, providing a solid foundation for data-driven decision-making at Turtle Games.
 
-## Recommendations for the Business
-* **Marketing Efforts:** *Where should the business focus its marketing? Suggest targeting customers with high spending scores or high remuneration, as they tend to accumulate more points.*
-* **Loyalty Program Improvements:** *How could the program be improved? Perhaps offer tiered rewards based on spending scores to encourage more engagement.*
-* **Analysis Improvements:** *What are the next steps? Consider non-linear models if the relationships aren't strictly linear. Also, collecting more feature data (e.g., frequency of purchase, product categories) could significantly improve model accuracy.*
+#### Summary of Findings
+
+*   **Key Drivers of Loyalty Identified:** The model confirms with statistical significance that `income`, `spendingScore`, and `age` are powerful positive predictors of `loyaltyPoints`. `SpendingScore` and `income` are the most influential factors. This directly answers the core business question of how customers accumulate loyalty points.
+
+*   **High Predictive Accuracy:** The model achieved a high **R-squared value of approximately 0.83 on unseen test data**. This means the model can explain about 83% of the variance in loyalty points, making it a reliable tool for predicting the point accumulation of new and existing customers.
+
+*   **Quantifiable Relationships:** The model's coefficients provide clear, interpretable insights. For every one-point increase in a customer's `spendingScore`, we can expect their `loyaltyPoints` to increase by approximately 34.6, holding all other factors constant. This quantifies the direct impact of customer spending behavior on loyalty.
+
+*   **Model Robustness:** Rigorous diagnostic testing confirmed that the model meets the key assumptions of linear regression (normality of residuals, homoscedasticity) and is not compromised by multicollinearity. This gives us strong confidence in the reliability of its predictions and interpretations.
+
+#### Actionable Recommendations for the Business
+
+Based on these findings, we propose the following specific, data-driven recommendations, prioritized by their potential impact on the business.
+
+*   **1. Launch a "VIP Customer" Program for High-Value Segments:**
+    *   **Observation:** `income` and `spendingScore` are the strongest predictors of high loyalty point balances.
+    *   **Recommendation:** Proactively identify the top 20% of customers based on their predicted `loyaltyPoints` using our model. Target this segment with an exclusive "VIP" marketing campaign that could include early access to new products, exclusive discounts, or personalized offers.
+    *   **Business Value:** This will not only increase sales from an already high-spending segment but also foster a stronger sense of loyalty and brand affinity, reducing customer churn and increasing lifetime value.
+
+*   **2. Implement a Tiered Loyalty System to Incentivize Growth:**
+    *   **Observation:** The relationship between spending and loyalty points is linear and strong.
+    *   **Recommendation:** Evolve the current loyalty program into a tiered system (e.g., Bronze, Silver, Gold). Use the predictive model to set data-driven thresholds for each tier. Critically, the model can identify customers who are "on the cusp" of the next tier, allowing for hyper-targeted promotions like "Spend £20 more this month to reach Gold status!"
+    *   **Business Value:** This gamifies the loyalty program, creating a clear incentive for customers to increase their spending with Turtle Games to unlock greater rewards, thereby directly driving revenue growth.
+
+*   **3. Optimize Customer Acquisition with Data-Driven Targeting:**
+    *   **Observation:** The model provides a clear statistical profile of what a high-value customer looks like (higher income, higher spending propensity).
+    *   **Recommendation:** Use this profile to refine customer acquisition strategies. Marketing teams can create "lookalike audiences" on digital advertising platforms (like Facebook or Google) that mirror the characteristics of our most valuable existing customers.
+    *   **Business Value:** This will significantly improve the efficiency and return on investment (ROI) of marketing spend by focusing resources on acquiring new customers who have the highest probability of becoming long-term, high-value members of the loyalty program.
+
+--- 
+
+### 6. Future Work: A Roadmap to a Predictive Customer Analytics Engine
+
+The linear regression model is a powerful and validated first step, providing immediate business value. To elevate this analysis to the highest standard and create a lasting competitive advantage, the following roadmap outlines how to evolve this initial model into a more sophisticated and deeply integrated customer analytics engine.
+
+1.  **Phase One: Enhancing Model Accuracy and Nuance**
+    *   **Objective:** To capture more complex, non-linear patterns in the data and increase predictive power.
+    *   **Method 1: Advanced Feature Engineering with `recipes`**: Our current `tidymodels` workflow can be enhanced by expanding the preprocessing `recipe`. We can test for interaction effects (e.g., does the impact of `spendingScore` change at different `income` levels?) by adding steps like `step_interact()`. This could uncover synergistic effects that a simple linear model misses.
+    *   **Method 2: Investigating Non-Linear Relationships with GAMs**: The assumption of linearity is strong. We can test it by implementing a **Generalized Additive Model (GAM)** using the `mgcv` package in R. GAMs can fit flexible curves (splines) to predictors, allowing us to see if, for example, the impact of `age` on loyalty points increases and then plateaus.
+    *   **Business Value**: These steps would produce a model with a potentially higher R-squared, leading to more accurate customer valuations and more precise targeting. Discovering a non-linear trend would be a critical insight, fundamentally changing how we understand the customer lifecycle.
+
+2.  **Phase Two: From Prediction to Proactive Classification**
+    *   **Objective:** To shift from predicting a loyalty *score* to predicting a customer's *value tier*, a more direct and actionable metric for marketing.
+    *   **Method:** Engineer a new target variable, such as `is_high_value` (e.g., TRUE for customers in the top 25% of `loyaltyPoints`). Using the `tidymodels` framework, we can then build and tune classification models (like **logistic regression** or **random forests**) to predict the *probability* that a new customer will belong to this high-value segment.
+    *   **Business Value:** This provides the marketing team with a powerful lead-scoring tool. Instead of a point estimate, they get a probability score (e.g., "Customer X has an 85% probability of becoming a high-value customer"), which can be used to automate decisions about which new sign-ups should receive premium onboarding or special offers.
+
+3.  **Phase Three: Operationalizing Analytics with a Live API**
+    *   **Objective**: To move the model from a static analytical report into a live, automated tool that can be used by other systems across the business.
+    *   **Method**: Use the R package **`plumber`** to wrap our trained `tidymodels` workflow into a REST API. This API can be deployed on a server and would be able to receive data for a new customer (e.g., from a web form) and instantly return their predicted loyalty points and value classification in a structured format like JSON.
+    *   **Business Value**: This is the ultimate goal of applied data science: making insights operational. This API could be integrated directly into:
+        *   **The company's CRM**: To automatically flag high-potential leads for the sales team.
+        *   **The E-commerce Platform**: To offer personalized, real-time incentives at checkout to customers identified by the model as being on the verge of a higher spending tier.
+        *   **Internal Dashboards**: To provide a real-time view of the predicted value of incoming customer cohorts.

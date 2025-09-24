@@ -83,6 +83,12 @@ The R analysis uses the **`renv`** package to create a reproducible, project-spe
 4.  **Restore the `renv` Environment**: When you first open the project, the `.Rprofile` script should automatically detect the lockfile. If prompted, agree to restore the environment from the lockfile. If you are not prompted, simply run the following command in the R console:
 
     ```r
+    renv::activate()
+    ```
+
+    This command creates an `R Virtual Environment (renv)` and generates a `.Rprofile` reference that will start the `renv` when `.R` project files are open next.
+
+    ```r
     renv::restore()
     ```
 
