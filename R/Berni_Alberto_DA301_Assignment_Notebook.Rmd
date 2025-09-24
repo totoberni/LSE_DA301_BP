@@ -16,6 +16,16 @@ output:
 pagedown::chrome_print(input = "R/Berni_Alberto_DA301_Assignment_Notebook.Rmd", output = "R/Berni_Alberto_DA301_Assignment_Notebook.pdf")
 ```
 
+> To pretty print, you can also use:
+
+```{r pretty_print, eval=FALSE}
+rmarkdown::render("R/Berni_Alberto_DA301_Assignment_Notebook.Rmd")
+```
+
+This will have to be opened in a browser and saved as a PDF.
+
+--- 
+
 ```{r setup, include=FALSE}
 # This chunk sets up the global options for the notebook.
 # The code in this chunk will run, but will not be shown in the final report.
