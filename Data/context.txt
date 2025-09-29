@@ -1,0 +1,217 @@
+1. Read the Data Analysis coursework scenario: 
+```plaintext
+You are part of a team of data analysts that was contracted by Turtle Games, a game manufacturer and retailer with a global customer base. The company manufactures and sells its own products, along with sourcing and selling products manufactured by other companies. Its product range includes books, board games, video games, and toys. The company collects data from sales and customer reviews. Turtle Games has a business objective of improving overall sales performance by analysing and considering customer trends.  
+
+To improve overall sales performance, Turtle Games has developed an initial set of questions. You’ll explore these questions in greater depth through the weekly assignment activities. The questions are: 
+
+How do customers engage with and accumulate loyalty points?
+How can customers be segmented into groups, and which groups can be targeted by the marketing department? 
+How can text data (e.g. social data such as customer reviews) be used to inform marketing campaigns and make improvements to the business?
+Can we use descriptive statistics to provide insights into the suitability of the loyalty points data to create predictive models (e.g. normal distribution, skewness, or kurtosis) to justify the answer.)
+To support your team of data analysts, you’ll:
+
+Create a Jupyter Notebook (IPYNB) and R script (R): You’ll analyse the data and prepare a complete Jupyter Notebook and R script that includes key metrics to inform decision-making (e.g. visualisations, comments, and thought processes). Remember to follow good practices in documenting your code intentions and noting your observations and interpretations.
+```
+
+2. Next, read the suggested approach for the .ipynb environment ONLY: 
+```Markdown 
+Week
+
+Assignment activity
+
+1
+
+Make predictions with regression.
+
+You’ll apply linear regression techniques to determine how customers accumulate loyalty points.
+
+For the final Jupyter Notebook, you should indicate your process of importing the relevant data set with the Pandas library, and storing the data in a DataFrame. You’ll also need to create, fit, and determine the accuracy of a regression model. 
+For the final report, you’ll provide a summary of the process you followed to create, fit, and improve the accuracy of the regression model.
+For the final presentation, you’ll discuss your observations and interpretation of the results of using the modelling techniques applied in your analysis of loyalty points.
+2
+
+Explore data with decision trees.
+
+You’ll create a decision tree regressor to gain insights into how customers accumulate loyalty points. 
+
+For the final Jupyter Notebook, you should:
+indicate your process of importing the necessary libraries and preparing the data for the decision tree
+grow and prune the tree 
+interpret the tree using appropriate visualisations. 
+For the final report, you’ll provide a summary of the process you followed to create, fit, and prune the decision tree.
+For the final presentation, you’ll provide a high-level overview of the insights gained during your process and how this could be used in improving the program, or in marketing efforts.
+3
+
+Make predictions with clustering.
+
+You’ll apply k-means clustering to segment customers into groups (based on remuneration and spending scores) that can be targeted by the marketing team. 
+
+For the final Jupyter Notebook, you should indicate your process of importing the necessary libraries and preparing the data for clustering. You’ll also need to create, fit, and determine the accuracy of a clustering model. 
+For the final report, you’ll provide a summary of the process you followed to create, fit, and improve the accuracy of the clustering model.
+For the final presentation, you’ll provide a high-level overview of the process you followed, indicate what you observed, and explain how the results can be used to improve marketing efforts.
+4
+
+Analyse customer sentiments observed in reviews.
+
+You’ll apply natural language processing (NLP) to determine how social data (e.g. customer reviews) can be used to inform marketing campaigns and business operations.
+
+For the final Jupyter Notebook, you should indicate your process of importing the relevant data set with the Pandas library, and storing the data in a DataFrame. You’ll also need to demonstrate the process you followed to perform NLP.
+For the final report, you’ll provide a summary of the process you followed to identify the 15 most common words and top 20 positive and negative reviews used in online product reviews.
+For the final presentation, you’ll provide a high-level description of the process you followed, indicate what you observed, and explain how identifying popular terms, sentiment, and specific keywords can be used to improve marketing decisions based on your NLP analysis.
+5
+
+Clean and wrangle data and perform EDA in R.
+
+You’ll load and wrangle the data, and use basic visualisation techniques during exploratory data analysis (EDA). You’ll also use visual techniques to communicate your basic findings.
+
+For the final R script, you’ll demonstrate your ability to load, wrangle, and explore the data visually using R. The script should contain the relevant code for the visualisations used in the technical and business submissions.
+For the final report, you need to explain your process and rationale behind the loading, cleaning, and wrangling, as well as the insights gained from applying visualisation techniques to perform exploratory data analysis and how the selected visualisations can create value for the organisation.
+For the final presentation, you’ll provide basic observations and insights based on the visual exploratory analysis of the data.
+6
+
+Make recommendations to the business.
+
+You’ll apply descriptive statistics and modelling techniques to create models that can be used to inform business decisions. This section will build on previous sections where you’ll need to decide which features to include and the appropriate model for the intended purpose. You can include observations regarding the evolution of your analysis and how you improved and refined the insights and recommendations provided to the business.
+
+For the final R script, you should indicate your process of answering the questions by applying descriptive statistical and modelling techniques and by crreating appropriate visualisations to communicate insights and model predictions.
+For the final report, you’ll comment on the descriptive statistical characteristics of the data set, the process of identifying and selecting appropriate features to use, and the modelling techniques applied. You’ll also comment on the model's performance and how this could be used to respond to the questions posed by Turtle games. You can also share any obstacles you faced in the process and how you overcame them.
+For the final presentation, you’ll briefly describe the process you followed and the insights gained at various stages of the project and how this impacted the choices made in terms of creating models that the business can use. Indicate what you observed, and explain your insights and recommendations to Turtle Games. Make sure to provide a rationale regarding how your analysis can support specific recommendations for actions to be implemented in the business. You can also suggest further questions to explore.
+Completing your Jupyter Notebook and R script
+Ensure that your code and outputs in your Jupyter Notebook and R script leverage best practices related to data ingestion, wrangling, visual design principles, documentation (comments and observations), making predictions, and reproducibility of code. Use the Jupyter Notebook template and R script file templates provided in the ZIP file you downloaded, along with the data.
+
+The suggested approach for your analysis is as follows:
+Data ingestion, wrangling, and predictive modelling: Utilise an accurate set of functions, variables, parameters, and attributes to import the data files, wrangle the data, and build predictive models leveraging various prediction algorithms with Python and R. 
+When importing, make sure you import the correct files in the appropriate format. 
+When wrangling, make sure to transform your data into a format that comprises consistent values, uses appropriate data types, and has no missing values. 
+When building models, ensure that you utilise the correct Python and R libraries, and give your function and variables names that are intuitive and descriptive.
+Ensure that you provide detailed and insightful descriptions of code and outputs at each stage in your Jupyter Notebook (using the text markdown feature) and R script (using R comments).
+Visualisation and predictions: Ensure that the created visualisations display your findings and communicate trends related to Turtle Games’s objectives.
+When plotting charts, follow the basic visual design principles concerning chart type, colour, size, resolution, and layout.
+When plotting charts, include extra context and information around the visualisations, such as why you chose the particular visualisation to convey the result and how the audience should interpret the output.
+Explain the code you used to prepare the visualisations as well as the interpretation of the outputs at each stage in your Jupyter Notebook and R script. 
+Jupyter Notebook and R script: Organise a clean, easy-to-understand, and structured Notebook that has a logical flow that communicates your end-to-end analysis. Ensure your code and outputs have corresponding descriptions so that the reader understands what each of the components in the Jupyter Notebook and the R script means, or is meant to do. Make sure the code lines in the Notebook have sequential numbering so that the readers can interpret the workflow and logic. (Hint: For Jupyter Notebooks, you may restart the kernel, run the code, and review the outputs before moving on to submitting your work.)
+Ensure that you use the correct naming convention before you submit. Save and submit your files as: 
+LastName_FirstName_DA301_Assignment_Notebook.ipynb 
+LastName_FirstName_DA301_Assignment_Rscript.R
+```
+
+3. Read and make a note of the 'High Distinction' marking criteria for the .ipynb notebook code:
+```Markdown
+Your Jupyter Notebook, R script, report, and presentation will be assessed using the following rubric:
+
+Criteria
+
+No Pass
+
+Pass
+
+Credit
+
+Distinction
+
+High Distinction
+
+50%–59%
+
+60%–69%
+
+70%–89%
+
+90%–100%
+
+Jupyter Notebook and R-script [30%] – Complete the required analytical processes and create visualisations to support business decision-making
+
+Did not meet the criteria
+
+Data ingestion, wrangling, and predictive modelling (10%): The data sets are imported successfully, but without using the appropriate Python and R functions. There is little evidence of attempting to validate the analysis process by applying data wrangling, visualisation, and predictive modelling techniques.
+
+Data ingestion, wrangling, and predictive modelling (10%): The data sets are imported successfully using the appropriate Python and R functions. The analysis process is validated by applying data wrangling, visualisation, and predictive modelling techniques. Various explanatory and exploratory techniques are implemented as part of the visualisation process to derive insights.
+
+Data ingestion, wrangling, and predictive modelling (10%): The data sets are imported successfully using the appropriate Python and R functions. The analysis process is validated by applying data wrangling, visualisation, and predictive modelling techniques. Various explanatory and exploratory techniques as a part of the visualisation process to derive insights and draw conclusions, are implemented.
+
+Data ingestion, wrangling, and predictive modelling (10%): The data sets are imported successfully using the appropriate Python and R functions. Various Python and R functions are implemented to structure the data and identify the outliers and other anomalies. The analysis is validated through evidence of further research beyond the course material to implement other data wrangling and predictive modelling features. Additional insights, other than the ones relating to the provided objectives, are derived along with concrete conclusions to inform the business scenario.
+
+Did not meet the criteria
+
+Predictive analysis and visualisations (10%): Various visualisations are used to communicate predictions and patterns. However, they do not follow design and prediction best practices, and do not highlight the biases or assumptions that might impact the interpretation. They are not always easy to follow or comprehend, and may at times be inaccurate.
+
+Predictive analysis and visualisations (10%): The visualisations follow the design and prediction best practices. They are creative and easy to understand, but not always accurate, and they still do not highlight the biases or assumptions.
+
+Predictive analysis and visualisations (10%): The visualisations follow design and prediction best practices highlighting the biases and assumptions that might impact the interpretation. They are creative, easy to understand, and accurate.
+
+Predictive analysis and visualisations (10%): The visualisations follow design and prediction best practices, highlighting the biases or assumptions that impact the interpretation. They are displayed with a logically structured visualisation and workflow that executes accurate results.
+
+Did not meet the criteria
+
+Code and code outputs (10%): All the code and executed results contain a few errors, and there are warnings in the Jupyter Notebook as well as the R script. Descriptions of the code outputs and results are not evident throughout or are unclear. The Jupyter Notebook and R script do not consistently contain output explanations to guide the reader through the analysis process.
+
+Code and code outputs (10%): All the code and executed results are without errors, but with several warnings in the Jupyter Notebook and R script. Descriptions of the code outputs and results are evident throughout and are clearly written. The Jupyter Notebook and R script contain output explanations to guide the reader through the analysis process; however, these explanations are incomplete or superficial and lack relevance to the business objective.
+
+Code and code outputs (10%): All code and executed results are without errors, and there are no warnings in the Jupyter Notebook or the R script. (In the case of isolated warnings, the learner has added comments in Python and R to signpost them.) Descriptions of the code outputs and results are evident throughout and clearly written. The Jupyter Notebook and R script consistently contain output explanations to guide the reader through the analysis process, and these explanations are detailed and support the business objective.
+
+Code and code outputs (10%): All the code and executed results are without errors, and there are no warnings in the Jupyter Notebook or the R script. (In the case of isolated warnings, the learner has added comments in Python and R to signpost them.) A mastery in programming is demonstrated by including comments to explain code, make it more readable, and support the business objective. Descriptions of the code outputs and results are evident throughout, clearly written, and insightful. The Jupyter Notebook and R script consistently contain output explanations to guide the reader through the analysis process. These explanations are detailed and support the business objective. In addition, there are citations to a number of credible resources to elaborate on their thinking behind the explanation so that they are relevant to the business questions.
+
+Technical report [30%] - Draft a report to communicate your analysis to technical users
+
+Did not meet the criteria
+
+Analysis approach (10%): A superficial approach to analysing the data is drafted, with no rationale behind the chosen analysis techniques.
+
+Analysis approach (10%): A detailed account of the approach to analysing the data is drafted, with some or no indication of how the data helps to address the business objectives. The rationale behind the chosen analysis techniques is explained.
+
+Analysis approach (10%): An elaborated account of the approach to analysing the data is drafted with a clear indication of how the data helps to address the business objectives. The rationale behind the chosen analysis is well explained with examples.
+
+Analysis approach (10%): A comprehensive account of the approach to analysing the data is drafted with compelling insights into how the data helps to address the business objectives. The rationale behind the chosen analysis techniques with examples and the limitations of the chosen analysis techniques are included.
+
+Did not meet the criteria
+
+Visualisation and insights (10%): The visualisation and the corresponding insights are merely a consolidation of gathered information, are not always oriented to the business scenario and are not organised logically. They do not align with the analysis process in the submitted Jupyter Notebook and R script.
+
+Visualisation and insights (10%): The visualisation and the corresponding insights are logically organised and oriented to the business scenario, aligning with the analysis process in the submitted Jupyter Notebook and R script.
+
+Visualisation and insights (10%): The visualisation and corresponding insights are organised logically and oriented to the business scenario. The insights and explanations are clearly stated, and the visualisations have well-articulated arguments to support the chosen visualisations.
+
+Visualisation and insights (10%): The visualisations and the corresponding insights have a clear narrative and logical workflow. The drafted insights comprise gathered information and clear and reasonable arguments behind the chosen approach to answer the business questions. The limitations of the chosen visualisations are also included.
+
+Did not meet the criteria
+
+Patterns and predictions (10%): The identified patterns and predicted results in the data are listed, but the predicted impacts on the business are not described or explained.
+
+Patterns and trends (10%): The identified patterns and predicted results are described. Explanations of the patterns that appear in the data are evident, as well as how the predicted results add value to the business.
+
+Patterns and predictions (10%): The identified patterns and predictions are elaborated, where a discussion of how the patterns impact the business objectives and how the predicted results add value to the business, is evident.
+
+Patterns and predictions (10%): All the identified patterns and predicted results are explained comprehensively. The reason behind the appearance in the patterns data, how they will impact the predicted results, and a brief around how the stakeholders can potentially use the patterns and predicted results to make better decisions for the business, are evident.
+
+Presentation [30%] - Communicate insights and recommendations to inform business decision-making
+
+Did not meet the criteria
+
+Presentation (10%): The presentation has minimal information on the results without a clear structure.
+
+Presentation (10%): The presentation includes a limited overview of the goals and a partial summary of recommendations.
+
+Presentation (10%): The presentation has a well-articulated introduction with context, clearly stated goals, and a summary of observations and recommendations.
+
+Presentation (10%): The presentation has compelling insights to inform the purpose of the analysis, clearly stated context and a summary of the goals or business questions. The summary contains a list of actionable recommendations that have been prioritised based on the expected impact on the organisation. The presentation also includes further insights based on addressing additional objectives identified by the learner.
+
+Did not meet the criteria
+
+Data story (10%): The presentation lacks detailed insights and data to support the recommendations.
+
+Data story (10%): The presentation provides some insights to address the business objectives but the use of data to tell the story is limited. The links between business questions, the analysis, observations and recommendations are not adequately demonstrated, and it is not clear why specific decisions were made or how the recommendations are justified.
+
+Data story (10%): The presentation provides good insights to address the business objectives with well-articulated insights and makes effective use of storytelling techniques to communicate with business users. The links between business questions, the analysis, observations and recommendations are clear and decisions and recommendations are justified. The insights clearly address the given objectives based on the visualisations presented.
+
+Data story (10%): The presentation has compelling insights to inform the decision-making capability of the business and demonstrates insights from research beyond the course material in a manner that is clear and easy to understand. The insights clearly address the given objectives and it is easy to understand the relationship between the objectives, work performed, observations and recommendations. The presentation demonstrates mastery of applying data-driven storytelling to communicate with business stakeholders to simplify complex messages.
+
+Did not meet the criteria
+
+Recommendations (10%): The presented recommendations are clear, but not sufficient. They do not have relevant integration with the included insights and objectives. The presentation has a business context but lacks a portrayal of persuading the audience to adopt the learners’ viewpoint or ideas.
+
+Recommendations (10%): The presented recommendations are sufficiently clear and relevant to the drafted insights as well as objectives for bolstering the business's decision-making capacity. The presentation has a business context and demonstrates a portrayal of persuading the audience to adopt the learner’s viewpoint or ideas.
+
+Recommendations (10%): The presented recommendations are clear and relevant to the drafted insights and objectives. They have supporting citations validating the recommendations. The information in the presentation is well articulated, and the delivered information persuades the audience to adopt the learners’ viewpoint or ideas by appealing to the audience’s interests.
+
+Recommendations (10%): The presented recommendations are validated and relevant to the business scenario. They are specific, measurable, and well defined. They are action‐oriented suggestions for stakeholders aligning to the business problem. The presentation has a business context and demonstrates a portrayal of persuading the audience to adopt the learners' viewpoint or ideas. Recommendations have been prioritised based on anticipated impact on the organisation and attempts have been made to quantify the expected impact. The presentation also includes further insights based on addressing additional objectives identified by the learner.
+```
