@@ -106,26 +106,32 @@ The R analysis uses the **`renv`** package to create a reproducible, project-spe
 
 The Python analysis is managed within a dedicated virtual environment.
 
-1.  **Clone the repository** to your local machine:
+1.  **Prerequisites: Install Build Tools**:
+    Some Python packages, like `numpy`, may need to be compiled from source if a pre-compiled version (a "wheel") is not available for your Python version on Windows. This requires the Microsoft C++ Build Tools.
+    -   Go to the [Visual Studio downloads page](https://visualstudio.microsoft.com/downloads/).
+    -   Scroll down to **All downloads**, expand **Tools for Visual Studio**, and download the **Build Tools for Visual Studio**.
+    -   Run the installer and select the **Desktop development with C++** workload.
+
+2.  **Clone the repository** to your local machine:
 
     ```bash
     git clone <your-repository-url>
     cd LSE_DA301_BP
     ```
 
-2.  **Navigate to the Python directory**:
+3.  **Navigate to the Python directory**:
 
     ```bash
     cd Python
     ```
 
-3.  **Create a virtual environment**:
+4.  **Create a virtual environment**:
 
     ```bash
     python -m venv .venv
     ```
 
-4.  **Activate the environment**:
+5.  **Activate the environment**:
 
       * On **macOS/Linux**:
         ```bash
@@ -136,19 +142,19 @@ The Python analysis is managed within a dedicated virtual environment.
         .\.venv\Scripts\activate
         ```
 
-5.  **Install the required dependencies**: With the environment activated, install all necessary libraries from the `requirements.txt` file.
+6.  **Install the required dependencies**: With the environment activated, install all necessary libraries from the `requirements.txt` file.
 
     ```bash
     pip install -r requirements.txt
     ```
 
-6.  **Register the environment as a Jupyter Kernel**: This step makes your virtual environment available within Jupyter, ensuring your notebook uses the correct packages.
+7.  **Register the environment as a Jupyter Kernel**: This step makes your virtual environment available within Jupyter, ensuring your notebook uses the correct packages.
 
     ```bash
     python -m ipykernel install --user --name=lse-da301-project
     ```
 
-7.  **Launch Jupyter and Run the Notebook**:
+8.  **Launch Jupyter and Run the Notebook**:
 
       * From terminal:
         ```bash
