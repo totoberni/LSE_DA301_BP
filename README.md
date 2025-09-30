@@ -128,9 +128,9 @@ The Python analysis is managed within a dedicated virtual environment.
 4.  **Create a virtual environment**:
 
     ```bash
-    python -m venv .venv
+    python3.12 -m venv .venv
     ```
-
+> `Compatibility note:` We must specify the Python version number because some packages are not available in the latest Python version `3.13.7`
 5.  **Activate the environment**:
 
       * On **macOS/Linux**:
