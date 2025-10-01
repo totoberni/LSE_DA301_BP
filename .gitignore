@@ -7,3 +7,4 @@ renv/staging/*
 renv/cellar/*
 
 *.mp4
+.Rproj.user

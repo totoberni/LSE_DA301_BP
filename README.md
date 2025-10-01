@@ -44,7 +44,7 @@ To ensure full reproducibility of the analysis, please follow the setup instruct
 
 ### R Environment
 
-The R analysis uses the **`renv`** package to create a reproducible, project-specific environment.
+The R analysis is designed for portability and can be run in a standard R environment (like RStudio or VS Code with the R extension) without requiring the `renv` package.
 
 1.  **Prerequisites**: Before you begin, ensure you have the necessary system-level software installed.
     
@@ -83,22 +83,11 @@ The R analysis uses the **`renv`** package to create a reproducible, project-spe
     cd LSE_DA301_BP
     ```
 
-3.  **Open the Project in R**: Start an R session with the project's root directory as the working directory. The easiest way to do this is by opening the project in an IDE like RStudio or VS Code (with the R extension).
+3.  **Install Dependencies**: The R Markdown notebook (`.Rmd`) loads all required libraries in the setup chunk. If any packages are missing from your R environment, you will need to install them manually. You can do this by running `install.packages("package_name")` in the R console for each required package.
 
-4.  **Restore the `renv` Environment**: When you first open the project, the `.Rprofile` script should automatically detect the lockfile. If prompted, agree to restore the environment from the lockfile. If you are not prompted, simply run the following command in the R console:
+4.  **Run the Analysis**: Open `R/Berni_Alberto_DA301_Assignment_Notebook.Rmd` in your preferred R IDE and run the code cells sequentially.
 
-    ```r
-    renv::activate()
-    ```
-
-    This command creates an `R Virtual Environment (renv)` and generates a `.Rprofile` reference that will start the `renv` when `.R` project files are open next.
-
-    ```r
-    renv::restore()
-    ```
-
-    This command reads the `renv.lock` file and installs the exact versions of all required R packages, ensuring a fully reproducible setup.\
-    You are now ready to run the analysis in `R/Berni_Alberto_DA301_Assignment_Notebook.Rmd`.
+    **Note on File Paths:** The notebook is designed to be run from the `R/` directory and loads data using relative paths (e.g., from `../Data/`). If you move the notebook file to a different location, you will need to update the data loading paths accordingly.
 
 -----
 
