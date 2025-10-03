@@ -55,11 +55,10 @@ In this section, we will load, clean, and explore the Turtle Games customer revi
 
 We begin by loading the pre-cleaned dataset created in the Python section of this project. Using a cleaned dataset ensures consistency and allows us to focus directly on the analysis in R.
 
-> `Note:` You will have to change the path to the data file to the correct path on your machine.
-
+> `Note:` You will have to change the path to the data file to the correct path on your machine. Currently set to `Data/turtle_reviews_2.csv`.
 ```{r load_data}
 # Load the cleaned dataset from the Data directory.
-reviews <- read_csv("../Data/turtle_reviews_2.csv")
+reviews <- read_csv(here("Data", "turtle_reviews_2.csv"))
 
 # Display the first few rows to confirm it loaded correctly
 head(reviews)
@@ -84,7 +83,7 @@ To rapidly generate a broad set of visualizations and identify areas for deeper 
 It can create a complete HTML report with dozens of plots in a single line of code.\
 It's suggested you open the HTML report in a browser and save it as a PDF.
 
-> `NOTE:` Feel free to change the output directory to the directory you saved the Rmd file in.
+> `NOTE:` Feel free to change the output directory (currently set to `R/out`) to the directory you saved the Rmd file in.
 > `NOTE:` You can safely ignore the `[WARNING] Deprecated: --no-highlight. Use --syntax-highlighting=none instead.` warning.\
 > `NOTE:` You can safely ignore the `Error in readLines(con, warn = FALSE) : cannot open the connection` error and additional `In readLines(con, warn = FALSE) : cannot open file 'out': Permission denied` warning.
 
@@ -649,9 +648,9 @@ To properly export this file in other formats, it is suggested you change the ou
 
 To export this notebook as a PDF, you can use the following command in the `R Interactive terminal` or run the following code chunk:
 ```{r export_pdf, eval=FALSE}
-pagedown::chrome_print(input = "./Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output = "./out/Berni_Alberto_DA301_Assignment_Notebook.pdf")
+pagedown::chrome_print(input = "R/Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output = "R/out/Berni_Alberto_DA301_Assignment_Notebook.pdf")
 ```
-> `Note:` This will also generate an intermediate HTML file in the current `R` directory. This can be deleted.\
+> `Note:` This will also generate an intermediate HTML file in the current directory. This can be deleted.\
 > `Note:` You can safely ignore the `[WARNING] Deprecated: --no-highlight. Use --syntax-highlighting=none instead.` warning.\
 > `Note:` You can safely ignore The `[error] handle_read_frame error: asio.system:10054 (An existing connection was forcibly closed by the remote host.)` error.
 
@@ -659,7 +658,7 @@ pagedown::chrome_print(input = "./Berni_Alberto_DA301_Assignment_RNotebook.Rmd",
 
 To pretty print the report as a HTML file, you can also use in the `R Interactive terminal` or run the following code chunk:
 ```{r pretty_print, eval=FALSE}
-rmarkdown::render("./Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output_dir = "./out")
+rmarkdown::render("R/Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output_dir = "R/out")
 ```
 > `Note:` This will have to be opened in a browser and saved as a PDF.\
 > `Note:` You can safely ignore the `[WARNING] Deprecated: --no-highlight. Use --syntax-highlighting=none instead.` warning.\
@@ -669,7 +668,7 @@ rmarkdown::render("./Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output_dir =
 
 To generate a full, clean R script that includes all R code and markdown text as comments, you can use the following command in the `R Interactive terminal` or run the following code chunk:
 ```{r export_script, eval=FALSE}
-knitr::purl("./Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output = "./Berni_Alberto_DA301_Assignment_RScript.R", documentation = 2)
+knitr::purl("R/Berni_Alberto_DA301_Assignment_RNotebook.Rmd", output = "R/Berni_Alberto_DA301_Assignment_RScript.R", documentation = 2)
 ```
 
 This will have to be opened in a browser and saved as a PDF.

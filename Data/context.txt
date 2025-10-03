@@ -13,8 +13,8 @@ To support your team of data analysts, you’ll:
 Create a Jupyter Notebook (IPYNB) and R script (R): You’ll analyse the data and prepare a complete Jupyter Notebook and R script that includes key metrics to inform decision-making (e.g. visualisations, comments, and thought processes). Remember to follow good practices in documenting your code intentions and noting your observations and interpretations.
 ```
 
-2. Next, read the suggested approach for the .ipynb environment ONLY: 
-```Markdown 
+2. Next, read the suggested approach: 
+```plaintext
 Week
 
 Assignment activity
@@ -95,8 +95,8 @@ LastName_FirstName_DA301_Assignment_Notebook.ipynb
 LastName_FirstName_DA301_Assignment_Rscript.R
 ```
 
-3. Read and make a note of the 'High Distinction' marking criteria for the .ipynb notebook code:
-```Markdown
+3. Read and make a note of the 'High Distinction' marking criteria:
+```plaintext
 Your Jupyter Notebook, R script, report, and presentation will be assessed using the following rubric:
 
 Criteria
